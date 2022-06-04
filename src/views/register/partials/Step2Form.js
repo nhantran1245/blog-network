@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Grid,
   ButtonGroup,
@@ -16,8 +16,9 @@ import { Alert } from "@material-ui/lab";
 export default function Step2Form({
   classes,
   handleNextClickCallBack,
-  handlePrevClickCallBack,
-  stepSave
+  stepSave,
+  userInfo,
+  handleSkipClickCallBack,
 }) {
   const fullNameRef = useRef();
   const birthDateRef = useRef();
@@ -29,6 +30,19 @@ export default function Step2Form({
   const handleChange = (event) => {
     setGender(event.target.value);
   };
+
+  useEffect(() => {
+    fullNameRef.current.value =
+      userInfo && userInfo.fullName ? userInfo.fullName : null;
+    birthDateRef.current.value =
+      userInfo && userInfo.birthDate ? userInfo.birthDate : null;
+    emailRef.current.value = userInfo && userInfo.email ? userInfo.email : null;
+    addressRef.current.value =
+      userInfo && userInfo.address ? userInfo.address : null;
+    userInfo && userInfo.gender && setGender(userInfo.gender);
+    userInfo && userInfo.phone && setPhone(userInfo.phone);
+  }, [userInfo]);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const fullName = fullNameRef.current.value.trim();
@@ -40,7 +54,7 @@ export default function Step2Form({
     } else if (phone && !validatePhone(phone)) {
       setError("Your phone is invalid");
     } else {
-      stepSave({fullName, birthDate, email, gender, phone, address});
+      stepSave({ fullName, birthDate, email, gender, phone, address });
       handleNextClickCallBack();
     }
   };
@@ -103,7 +117,10 @@ export default function Step2Form({
           <FormLabel component="label" className={classes.formLabel}>
             Phone
           </FormLabel>
-          <PhoneField onChangeCallBack={(value) => setPhone(value)} />
+          <PhoneField
+            onChangeCallBack={(value) => setPhone(value)}
+            value={phone}
+          />
         </Grid>
         <Grid item xs={12} style={{ marginTop: "15px" }}>
           <TextField
@@ -132,12 +149,15 @@ export default function Step2Form({
             aria-label="contained secondary button group"
             variant="contained"
           >
-            <Button onClick={handlePrevClickCallBack}>Prev</Button>
-            <Button>Skip</Button>
+            <Button onClick={handleSkipClickCallBack}>Skip</Button>
             <Button type="submit">Next</Button>
           </ButtonGroup>
         </Grid>
       </Grid>
+      <Alert severity="success" style={{marginTop: "20px"}}>
+        User Account has been created successfully! <br/>
+        You can skip this 2 steps and login with new account.
+      </Alert>
     </form>
   );
 }

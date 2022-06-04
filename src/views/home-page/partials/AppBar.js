@@ -14,6 +14,7 @@ import AccountCircle from "@material-ui/icons/AccountCircle";
 import MailIcon from "@material-ui/icons/Mail";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import MoreIcon from "@material-ui/icons/MoreVert";
+import Avatar from "@material-ui/core/Avatar";
 
 const useStyles = makeStyles((theme) => ({
   grow: {
@@ -79,13 +80,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function PrimarySearchAppBar() {
+export default function PrimarySearchAppBar({ user, handleLogout }) {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [mailAnchorEl, setMailAnchorEl] = React.useState(null);
+  const [notificationAnchorEl, setNotificationAnchorEl] = React.useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const isMailMenuOpen = Boolean(mailAnchorEl);
+  const isNotificationMenuOpen = Boolean(notificationAnchorEl);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -104,6 +109,22 @@ export default function PrimarySearchAppBar() {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const handleMailMenuOpen = (event) => {
+    setMailAnchorEl(event.currentTarget);
+  };
+
+  const handleNotificationMenuOpen = (event) => {
+    setNotificationAnchorEl(event.currentTarget);
+  };
+
+  const handleNotificationMenuClose = () => {
+    setNotificationAnchorEl(null);
+  };
+
+  const handleMailMenuClose = () => {
+    setMailAnchorEl(null);
+  };
+
   const menuId = "primary-search-account-menu";
   const renderMenu = (
     <Menu
@@ -116,7 +137,39 @@ export default function PrimarySearchAppBar() {
       onClose={handleMenuClose}
     >
       <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleLogout}>Log out</MenuItem>
+    </Menu>
+  );
+
+  const mailMenuId = "primary-search-mail-menu";
+  const mailMenu = (
+    <Menu
+      anchorEl={mailAnchorEl}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      id={mailMenuId}
+      keepMounted
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isMailMenuOpen}
+      onClose={handleMailMenuClose}
+    >
+      <MenuItem onClick={handleMailMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleMailMenuClose}>My account</MenuItem>
+    </Menu>
+  );
+
+  const notificationMenuId = "primary-search-notification-menu";
+  const notificationMenu = (
+    <Menu
+      anchorEl={notificationAnchorEl}
+      anchorOrigin={{ vertical: "top", horizontal: "right" }}
+      id={notificationMenuId}
+      keepMounted
+      transformOrigin={{ vertical: "top", horizontal: "right" }}
+      open={isNotificationMenuOpen}
+      onClose={handleNotificationMenuClose}
+    >
+      <MenuItem onClick={handleNotificationMenuClose}>Profile</MenuItem>
+      <MenuItem onClick={handleNotificationMenuClose}>My account</MenuItem>
     </Menu>
   );
 
@@ -131,16 +184,26 @@ export default function PrimarySearchAppBar() {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
-        <IconButton aria-label="show 4 new mails" color="inherit">
+      <MenuItem onClick={handleMailMenuOpen}>
+        <IconButton
+          aria-label="show 4 new mails"
+          color="inherit"
+          arial-controls="primary-search-mail-menu"
+          aria-haspopup="true"
+        >
           <Badge badgeContent={4} color="secondary">
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
-      </MenuItem>
-      <MenuItem>
-        <IconButton aria-label="show 11 new notifications" color="inherit">
+      </MenuItem> 
+      <MenuItem onClick={handleNotificationMenuOpen}>
+        <IconButton
+          aria-label="show 11 new notifications"
+          color="inherit"
+          aria-haspopup="true"
+          arial-controls={notificationMenuId}
+        >
           <Badge badgeContent={11} color="secondary">
             <NotificationsIcon />
           </Badge>
@@ -174,7 +237,7 @@ export default function PrimarySearchAppBar() {
             <MenuIcon />
           </IconButton>
           <Typography className={classes.title} variant="h6" noWrap>
-            Material-UI
+            Blog Network
           </Typography>
           <div className={classes.search}>
             <div className={classes.searchIcon}>
@@ -191,12 +254,22 @@ export default function PrimarySearchAppBar() {
           </div>
           <div className={classes.grow} />
           <div className={classes.sectionDesktop}>
-            <IconButton aria-label="show 4 new mails" color="inherit">
+            <IconButton
+              aria-label="show 4 new mails"
+              arial-controls="primary-search-mail-menu"
+              color="inherit"
+              onClick={handleMailMenuOpen}
+            >
               <Badge badgeContent={4} color="secondary">
                 <MailIcon />
               </Badge>
             </IconButton>
-            <IconButton aria-label="show 17 new notifications" color="inherit">
+            <IconButton
+              aria-label="show 17 new notifications"
+              color="inherit"
+              arial-controls={notificationMenuId}
+              onClick={handleNotificationMenuOpen}
+            >
               <Badge badgeContent={17} color="secondary">
                 <NotificationsIcon />
               </Badge>
@@ -209,7 +282,7 @@ export default function PrimarySearchAppBar() {
               onClick={handleProfileMenuOpen}
               color="inherit"
             >
-              <AccountCircle />
+              <Avatar alt={<AccountCircle />} src={user?.avatar} />
             </IconButton>
           </div>
           <div className={classes.sectionMobile}>
@@ -227,6 +300,8 @@ export default function PrimarySearchAppBar() {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {mailMenu}
+      {notificationMenu}
     </div>
   );
 }

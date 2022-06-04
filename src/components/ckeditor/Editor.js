@@ -5,11 +5,13 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import draftToHtml from "draftjs-to-html";
 import apiInstance from "../../services/axios_helper";
 import "./styles.scss";
+import { getImgUrlFromServer } from "../../utils/common";
 
-export default function WrapEditor() {
+export default function WrapEditor({ onChangeCallback }) {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const onEditorStateChange = (state) => {
     setEditorState(state);
+    onChangeCallback(draftToHtml(convertToRaw(state.getCurrentContent())));
   };
 
   // const uploadCallback = (file) => {
@@ -31,7 +33,7 @@ export default function WrapEditor() {
       apiInstance
         .post("/api/upload", data)
         .then((res) => {
-          resolve({ data: { link: "http://localhost:3001/" + res.data.path.replaceAll("\\", "/") } });
+          resolve({ data: { link: getImgUrlFromServer(res.data.path) } });
         })
     });
   };
@@ -56,11 +58,6 @@ export default function WrapEditor() {
               width: "auto",
             },
           },
-        }}
-      />
-      <div
-        dangerouslySetInnerHTML={{
-          __html: draftToHtml(convertToRaw(editorState.getCurrentContent())),
         }}
       />
     </>

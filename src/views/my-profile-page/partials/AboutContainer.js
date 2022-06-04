@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import {
   Grid,
@@ -7,15 +7,11 @@ import {
   List,
   ListItem,
   ListItemText,
-  IconButton,
-  ListItemSecondaryAction,
   ListItemAvatar,
   Avatar,
 } from "@material-ui/core";
 import { Rating } from "@material-ui/lab";
 import ArrowRightIcon from "@material-ui/icons/ArrowRight";
-import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
 import FacebookIcon from "@material-ui/icons/Facebook";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import GitHubIcon from "@material-ui/icons/GitHub";
@@ -70,15 +66,8 @@ export default function AboutContainer() {
       readOnly: true,
     },
   ];
-  const [skillList, setSkillList] = useState(defaultSkillList);
 
-  const handleEditSkill = (index) => {
-    let skillListTemp = [...skillList];
-    skillListTemp[index].readOnly = false;
-    setSkillList(skillListTemp);
-  };
-
-  const renderSkillList = (item, index) => (
+  const renderSkillList = (item) => (
     <ListItem key={item.name}>
       <ArrowRightIcon />
       <ListItemText
@@ -92,24 +81,12 @@ export default function AboutContainer() {
           />
         }
       />
-      <ListItemSecondaryAction>
-        <IconButton
-          edge="end"
-          aria-label="delete"
-          onClick={() => handleEditSkill(index)}
-        >
-          <EditIcon />
-        </IconButton>
-        <IconButton edge="end" aria-label="delete">
-          <DeleteIcon />
-        </IconButton>
-      </ListItemSecondaryAction>
     </ListItem>
   );
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={5}>
-        <Grid item xs={3}>
+        <Grid item xs={12} sm={6} md={3}>
           <Item>
             {/* <Typography
               variant="h6"
@@ -122,11 +99,11 @@ export default function AboutContainer() {
             </Typography> */}
             <CardTitle title="SKILL" styles={{ paddingLeft: "30px"}}/>
             <List dense={true}>
-              {skillList.map((item, index) => renderSkillList(item, index))}
+              {defaultSkillList.map((item) => renderSkillList(item))}
             </List>
           </Item>
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={12} sm={6} md={9}>
           <Item className={classes.rightWell}>
             <CardTitle title="OBJECT" />
             <Typography
@@ -144,7 +121,7 @@ export default function AboutContainer() {
             </Typography>
           </Item>
           <Grid container spacing={5}>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={12} md={6}>
               <Item className={classes.rightWell}>
                 <CardTitle title="INFORMATION" />
                 <List dense={true}>
@@ -210,7 +187,7 @@ export default function AboutContainer() {
                 </List>
               </Item>
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12} sm={12} md={6}>
               <Item className={classes.rightWell}>
                 <CardTitle title="SOCIAL"/>
                 <List>

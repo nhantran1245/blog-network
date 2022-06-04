@@ -12,9 +12,7 @@ const config = {
 export default {
   get: (url, params) => ApiInstance.get(url, { ...config, params }),
   post: (url, params, body) => ApiInstance.post(url, body, { ...config, params }),
-  put: () => {
-
-  },
+  put: (url, params, body) => ApiInstance.put(url, body, {...config, params}),
   delete: () => {
 
   }

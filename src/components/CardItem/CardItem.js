@@ -27,7 +27,7 @@ export const CardTitle = ({ title, styles }) => {
       color="primary"
       className={classes.title}
     >
-      {title.toUpperCase()}
+      { title ? title.toUpperCase() : "" }
     </Typography>
   );
 };
