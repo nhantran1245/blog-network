@@ -109,10 +109,10 @@ export default function ContactContainer() {
   };
   return (
     <Grid container spacing={5}>
-      <Grid item xs={5}>
+      <Grid item xs={12} md={5}>
         {renderContactInformation()}
       </Grid>
-      <Grid item xs={7}>
+      <Grid item xs={12} md={7}>
         {renderMessageForm()}
       </Grid>
     </Grid>

@@ -6,11 +6,13 @@ import {
   validatePassword,
 } from "../../../utils/common";
 import Alert from "@material-ui/lab/Alert";
+import apiInstance from "../../../services/api_helper";
 
 export default function Step1Form({
   classes,
   handleNextClickCallBack,
-  stepSave,
+  setUserId,
+  setLoading,
 }) {
   const [error, setError] = useState("");
   const firstNameRef = useRef();
@@ -51,23 +53,21 @@ export default function Step1Form({
         username,
         password,
       };
-      // setLoading(true);
-      // apiInstance
-      //   .post("/auth/register", null, payload)
-      //   .then((res) => {
-      //     setError("");
-      //     setUserId(res.data._doc._id);
-      //     handleNextClickCallBack();
-      //   })
-      //   .catch((err) => {
-      //     console.log(err.response.data.message);
-      //     setError(err.message);
-      //   })
-      //   .finally(() => {
-      //     setLoading(false);
-      //   });
-      stepSave(payload);
-      handleNextClickCallBack();
+      setLoading(true);
+      apiInstance
+        .post("/auth/register", null, payload)
+        .then((res) => {
+          setError("");
+          setUserId(res.data._doc._id);
+          handleNextClickCallBack();
+        })
+        .catch((err) => {
+          console.log(err.response.data.message);
+          setError(err.response.data.message);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
     }
   };
   return (

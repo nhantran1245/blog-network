@@ -3,7 +3,7 @@ import React from "react";
 import ProfilePage from "./ProfileSection";
 import "./styles.scss";
 
-export default function HomePage() {
+export default function MyResum() {
   
   return (
     <div className="wrapper">

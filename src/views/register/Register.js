@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useHistory  } from "react-router-dom";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
 import Slider from "@material-ui/core/Slider";
@@ -8,6 +9,16 @@ import Step1Form from "./partials/Step1Form";
 import Step2Form from "./partials/Step2Form";
 import Step3Form from "./partials/Step3Form";
 import LinearProgress from "@material-ui/core/LinearProgress";
+
+const defaultUser = {
+  fullName: "",
+  gender: "",
+  birthDate: "",
+  email: "",
+  phone: "",
+  address: "",
+  avatar: "",
+};
 
 const useStyle = makeStyles((theme) => ({
   root: {
@@ -23,7 +34,7 @@ const useStyle = makeStyles((theme) => ({
     },
   },
   form: {
-    padding: "20px 100px",
+    padding: "20px",
     textAlign: "left",
     "& .MuiTextField-root": {
       margin: theme.spacing(1),
@@ -42,14 +53,16 @@ const useStyle = makeStyles((theme) => ({
   },
   formLabel: {
     paddingLeft: "8px",
-    marginBottom: 0
-  }
+    marginBottom: 0,
+  },
 }));
 export default function Register() {
   const classes = useStyle();
-  const [step, setStep] = useState(2);
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState({});
+  const [userId, setUserId] = useState(null);
+  const [userInfo, setUserInfo] = useState(defaultUser);
+  const history = useHistory();
   const marks = [
     {
       value: 1,
@@ -70,15 +83,22 @@ export default function Register() {
   const handlePrevClick = () => {
     setStep(step - 1);
   };
+  const stepSave = (payload) => {
+    setUserInfo({ ...userInfo, ...payload });
+  };
+  const handleSkipClickCallBack = () => {
+    history.push("/login");
+  };
+
   const renderStepForm = () => {
     if (step === 1) {
       return (
         <Step1Form
           classes={classes}
           handleNextClickCallBack={handleNextClick}
-          handlePrevClickCallback={handlePrevClick}
+          handleSkipClickCallBack={handleSkipClickCallBack}
           setLoading={setLoading}
-          stepSave={stepSave}
+          setUserId={setUserId}
         />
       );
     } else if (step === 2) {
@@ -88,29 +108,29 @@ export default function Register() {
           handleNextClickCallBack={handleNextClick}
           handlePrevClickCallBack={handlePrevClick}
           setLoading={setLoading}
+          userId={userId}
           stepSave={stepSave}
+          userInfo={userInfo}
+          handleSkipClickCallBack={handleSkipClickCallBack}
         />
       );
     } else if (step === 3) {
       return (
         <Step3Form
           classes={classes}
-          handleNextClickCallBack={handleNextClick}
           handlePrevClickCallBack={handlePrevClick}
           setLoading={setLoading}
           stepSave={stepSave}
+          userInfo={userInfo}
+          userId={userId}
+          handleSkipClickCallBack={handleSkipClickCallBack}
         />
       );
     } else {
       return null;
     }
   };
-  const stepSave = (payload) => {
-    setUser({
-      ...user,
-      ...payload,
-    })
-  }
+
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -126,7 +146,7 @@ export default function Register() {
         />
         <CardItem>
           {renderStepForm()}
-          {loading && (<LinearProgress color="secondary" />)}
+          {loading && <LinearProgress color="secondary" />}
         </CardItem>
       </Container>
     </div>

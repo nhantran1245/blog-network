@@ -21,7 +21,7 @@ import {
   TimelineItem,
   TimelineDot,
 } from "@material-ui/lab";
-import LightTooltip from "./../../../components/tooltip/LightToolTip";
+import LightTooltip from "../../../components/tooltip/LightToolTip";
 import CardMembershipIcon from "@material-ui/icons/CardMembership";
 
 const useStyles = makeStyles(() => ({
@@ -245,11 +245,11 @@ export default function ResumContainer() {
   return (
     <Box xs={{ flexGrow: 1 }}>
       <Grid container spacing={5}>
-        <Grid item xs={4}>
+        <Grid item xs={12} md={4}>
           {renderEducationContent()}
           {renderCertificate()}
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={12} md={8}>
           {renderWorkExperienceContent()}
         </Grid>
       </Grid>
