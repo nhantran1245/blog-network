@@ -17,7 +17,7 @@ export const blogSlice = createSlice({
       state.blogs = state.blogs.concat(action.payload);
       state.isLoading = false;
     },
-    getBlogsFail: (state, action) => {
+    callBlogApiFail: (state, action) => {
       state.isLoading = false;
       state.error = action.payload;
     },
@@ -43,7 +43,7 @@ export const {
   loadMoreBlog,
   callBlogApi,
   getBlogsSuccess,
-  getBlogsFail,
+  callBlogApiFail,
   createBlogSuccess,
   getBlogDetailsSuccess,
 } = blogSlice.actions;

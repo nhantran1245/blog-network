@@ -37,7 +37,7 @@ export const unlikeBlogApi = async (payload) => {
 
 export const addCommentBlogApi = async (payload) => {
   return api_helper
-    .post(`/api/blog/${payload.id}/comment`, null, payload)
+    .post(`/api/blog/${payload.id}/comment`, null, payload.payload)
     .then((res) => res.data)
     .catch((err) => err);
 };

@@ -1,7 +1,7 @@
 import { call, put, takeEvery } from "redux-saga/effects";
 import {
   loadMoreBlog,
-  getBlogsFail,
+  callBlogApiFail,
   createBlogSuccess,
   getBlogDetailsSuccess,
   callBlogApi,
@@ -21,53 +21,57 @@ export function* getBlogList() {
     const blogs = yield call(fetchBlogs);
     yield put(loadMoreBlog(blogs.data));
   } catch {
-    yield put(getBlogsFail());
+    yield put(callBlogApiFail());
   }
 }
 
 export function* createBlog(action) {
   try {
+    yield put(callBlogApi());
     const blog = yield call(createNewBlog, action.payload);
     yield put(createBlogSuccess(blog));
   } catch {
-    yield put(getBlogsFail());
+    yield put(callBlogApiFail());
   }
 }
 
 export function* getBlogDetailById(action) {
   try {
-    console.log(action);
+    yield put(callBlogApi());
     const blog = yield call(getBlogDetails, action.payload);
     yield put(getBlogDetailsSuccess(blog));
   } catch {
-    yield put(getBlogsFail());
+    yield put(callBlogApiFail());
   }
 }
 
 export function* likeBlog(action) {
   try {
+    yield put(callBlogApi());
     const blog = yield call(likeBlogApi, action.payload);
     yield put({type: "GET_BLOG_DETAILS", payload: { id: blog._id } });
   } catch {
-    yield put(getBlogsFail());
+    yield put(callBlogApiFail());
   }
 }
 
 export function* unlikeBlog(action) {
   try {
+    yield put(callBlogApi());
     const blog = yield call(unlikeBlogApi, action.payload);
     yield put({type: "GET_BLOG_DETAILS", payload: { id: blog._id } });
   } catch {
-    yield put(getBlogsFail());
+    yield put(callBlogApiFail());
   }
 }
 
 export function* addCommentBlog(action) {
   try {
+    yield put(callBlogApi());
     const blog = yield call(addCommentBlogApi, action.payload);
     yield put({type: "GET_BLOG_DETAILS", payload: { id: blog._id } });
   } catch {
-    yield put(getBlogsFail());
+    yield put(callBlogApiFail());
   }
 }
 

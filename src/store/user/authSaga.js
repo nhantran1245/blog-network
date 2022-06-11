@@ -9,6 +9,7 @@ function* handleLogin(action) {
     const response = yield call(loginApi, action.payload);
     localStorage.setItem("access-token", response.jwtToken);
     yield put(authAction.loginSuccess());
+    yield put({ type: "FETCH_USER" });
     yield put(push("/"));
   } catch (e) {
     yield put(authAction.loginFail());
